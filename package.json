@@ -17,5 +17,9 @@
   "dependencies": {
     "mongodb": "^2.2.22",
     "soap": "^0.18.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ScottMacWatters/sfdc-verify-tools.git"
   }
 }
