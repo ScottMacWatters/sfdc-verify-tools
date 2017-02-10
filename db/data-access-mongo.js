@@ -1,6 +1,7 @@
 (function() {
 
   var mongo = require('mongodb').MongoClient;
+  const DEV_NAMESPACE = (process.env.NAMESPACE) ? process.env.NAMESPACE : '';
 
   var url = process.env.MONGODB_URI;
 
@@ -16,7 +17,7 @@
           return callback(null,err);
         }
         _db = mdb;
-        return callback(_db.collection(cName));
+        return callback(_db.collection(cName + DEV_NAMESPACE));
       });
     }
     else if(!_db && connecting){
@@ -26,7 +27,7 @@
       return;
     }
     else{
-      return callback(_db.collection(cName));
+      return callback(_db.collection(cName + DEV_NAMESPACE));
     }
   }
 
