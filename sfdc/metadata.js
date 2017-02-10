@@ -2,9 +2,18 @@
 
   var soap = require('soap');
   var fs = require('fs');
-  var enterprise = require('enterprise');
+  var enterprise = require('./enterprise.js');
   var metadata_wsdl = 'sfdc/wsdl/sfdc_metadata_wsdl.xml';
-  var deployable = fs.readFileSync('/sfdc/res/simpleClasses.zip', 'base64');
+
+  var deployable;
+  try {
+    deployable = fs.readFileSync('../node_modules/sfdc-verify-tools/sfdc/res/simpleClasses.zip','base64');
+    console.log('using node modules deployable.')
+  }
+  catch(e){
+    deployable = fs.readFileSync('./sfdc/res/simpleClasses.zip', 'base64');
+    console.log('using local deployable');
+  }
   var deployOptions = {
     zipFile: deployable,
     DeployOptions : {

@@ -2,7 +2,7 @@
 
   var soap = require('soap');
   var fs = require('fs');
-  var enterprise = require('enterprise');
+  var enterprise = require('./enterprise.js');
   var tooling_wsdl = '/wsdl/sfdc_tooling_wsdl.xml';
   var runTestsOptions = {
     classIds: null,
