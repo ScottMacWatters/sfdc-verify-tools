@@ -18,30 +18,28 @@
       }
     },1000 * 60);
 
-      console.log('Beginning Async Apex Tests for datacenters',Object.keys(logins));
-      for(var dc in logins){
-        outstanding++;
-        try{
-          (function(dc){
-            sfdc.beginRunTests(logins[dc], function(err, id){
-              if(err){
-                console.log("Error:");
-                console.log(err);
-                return;
-              }
-              db.saveTestRequest(dc,id);
-              outstanding--;
-              checkTestTask(dc);
-            });
-          }(dc));
-        }
-        catch(err){
-          console.log(err);
-        }
+    console.log('Beginning Async Apex Tests for datacenters',Object.keys(logins));
+    for(var dc in logins){
+      outstanding++;
+      try{
+        (function(dc){
+          sfdc.beginRunTests(logins[dc], function(err, id){
+            if(err){
+              console.log("Error:");
+              console.log(err);
+              return;
+            }
+            db.saveTestRequest(dc,id);
+            outstanding--;
+            checkTestTask(dc);
+          });
+        }(dc));
       }
-    };
-  }
-
+      catch(err){
+        console.log(err);
+      }
+    }
+  };
 
   function checkTestTask(login, datacenter){
     var outstandingIds = db.getTestRequests(datacenter, function(ids){
@@ -56,15 +54,15 @@
             db.clearCompletedTestRequest(datacenter,id);
             db.saveTestTime(datacenter,times);
           },sfdc_query_timeout);
-        }(ids[key].asyncApexJobId))
+        }(ids[key].asyncApexJobId));
       }
     });
   }
 
-  module.exprots.checkTestTasks = function(logins){
+  module.exports.checkTestTasks = function(logins){
     for(var dc in logins){
       checkTestTask(logins[dc], dc);
     }
-  }
+  };
 
 }());
