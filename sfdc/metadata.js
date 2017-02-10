@@ -2,9 +2,9 @@
 
   var soap = require('soap');
   var fs = require('fs');
-  var enterprise = require('./enterprise');
-  var metadata_wsdl = './sfdc/wsdl/sfdc_metadata_wsdl.xml';
-  var deployable = fs.readFileSync('./sfdc/res/simpleClasses.zip', 'base64');
+  var enterprise = require('enterprise');
+  var metadata_wsdl = 'sfdc/wsdl/sfdc_metadata_wsdl.xml';
+  var deployable = fs.readFileSync('/sfdc/res/simpleClasses.zip', 'base64');
   var deployOptions = {
     zipFile: deployable,
     DeployOptions : {

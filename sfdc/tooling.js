@@ -2,8 +2,8 @@
 
   var soap = require('soap');
   var fs = require('fs');
-  var enterprise = require('./enterprise');
-  var tooling_wsdl = './sfdc/wsdl/sfdc_tooling_wsdl.xml';
+  var enterprise = require('enterprise');
+  var tooling_wsdl = '/wsdl/sfdc_tooling_wsdl.xml';
   var runTestsOptions = {
     classIds: null,
     suiteIds: null,
@@ -41,7 +41,7 @@
       var queryOptions = {
         queryString: QUERY_STRING.replace(ID_TOKEN, id)
       }
-      
+
       getQueryStatusResponse(tool_client.query, queryOptions, function(err, record){
         if(err){
           callback(err);
