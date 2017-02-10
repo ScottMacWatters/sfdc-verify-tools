@@ -3,7 +3,6 @@
   var soap = require('soap');
   var fs = require('fs');
   var enterprise = require('./enterprise.js');
-  var tooling_wsdl = '/wsdl/sfdc_tooling_wsdl.xml';
   var runTestsOptions = {
     classIds: null,
     suiteIds: null,
@@ -13,7 +12,15 @@
     suiteNames: null
   };
   var ID_TOKEN = '<ID>';
-  var QUERY_STRING = "SELECT AsyncApexJobId,CreatedDate,EndTime,StartTime,Status FROM ApexTestRunResult WHERE AsyncApexJobId = '" + ID_TOKEN + "'"
+  var QUERY_STRING = "SELECT AsyncApexJobId,CreatedDate,EndTime,StartTime,Status FROM ApexTestRunResult WHERE AsyncApexJobId = '" + ID_TOKEN + "'";
+
+  var tooling_wsdl;
+  try{
+    tooling_wsdl = 'node_modules/sfdc-verify-tools/sfdc/wsdl/sfdc_tooling_wsdl.xml'; fs.readFileSync(tooling_wsdl,'base64');
+  }
+  catch(err){
+    tooling_wsdl = 'sfdc/wsdl/sfdc_tooling_wsdl.xml';
+  }
 
 
   module.exports.beginRunTests = function(creds, callback){

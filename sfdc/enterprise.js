@@ -2,7 +2,14 @@
 
   var soap = require('soap');
   var fs = require('fs');
-  var enterprise_wsdl = './sfdc/wsdl/sfdc_enterprise_wsdl.xml';
+
+  var enterprise_wsdl;
+  try{
+    enterprise_wsdl = 'node_modules/sfdc-verify-tools/sfdc/wsdl/sfdc_enterprise_wsdl.xml'; fs.readFileSync(enterprise_wsdl,'base64');
+  }
+  catch(err){
+    enterprise_wsdl = '/sfdc/wsdl/sfdc_enterprise_wsdl.xml';
+  }
 
   module.exports.sfdcLogin = function(creds, callback){
 
