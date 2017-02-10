@@ -1,6 +1,6 @@
 {
   "name": "sfdc-verify-tools",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Tools for verifying SFDC asynchronous processes",
   "main": "index.js",
   "scripts": {
