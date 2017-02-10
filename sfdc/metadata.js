@@ -7,7 +7,7 @@
 
   var deployable;
   try {
-    deployable = fs.readFileSync('../node_modules/sfdc-verify-tools/sfdc/res/simpleClasses.zip','base64');
+    deployable = fs.readFileSync('./node_modules/sfdc-verify-tools/sfdc/res/simpleClasses.zip','base64');
     console.log('using node modules deployable.')
   }
   catch(e){
