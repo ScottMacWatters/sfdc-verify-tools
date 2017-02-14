@@ -130,7 +130,7 @@
 
   module.exports.getDataCenters = function(callback){
     db('datacenters',function(dcCollection){
-      dcCollection.find({}).toArray(function(err, dcs)){
+      dcCollection.find({}).toArray(function(err, dcs){
         var out = [];
         for(var i in dcs){
           out.push(stripId(dcs[i]));
@@ -141,7 +141,7 @@
         });
 
         callback(out);
-      }
+      });
     });
   };
 
