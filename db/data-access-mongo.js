@@ -129,15 +129,19 @@
   };
 
   module.exports.getDataCenters = function(callback){
-    db('logins',function(loginCollection){
-      loginCollection.find({}).toArray(function(err, logins) {
-        logins = stripId(logins[0]);
-        var dcs = [];
-        for(var key in logins){
-          dcs.push(key);
+    db('datacenters',function(dcCollection){
+      dcCollection.find({}).toArray(function(err, dcs)){
+        var out = [];
+        for(var i in dcs){
+          out.push(stripId(dcs[i]));
         }
-        callback(dcs);
-      });
+
+        out.sort(function(a,b){
+          return a.name.localeCompare(b.name);
+        });
+
+        callback(out);
+      }
     });
   };
 
