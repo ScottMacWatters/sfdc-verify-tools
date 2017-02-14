@@ -133,6 +133,23 @@
       dcCollection.find({}).toArray(function(err, dcs){
         var out = [];
         for(var i in dcs){
+          out.push(dcs[i].name);
+        }
+
+        out.sort(function(a,b){
+          return a.localeCompare(b);
+        });
+
+        callback(out);
+      });
+    });
+  };
+
+  module.exports.getDataCentersVerbose = function(callback){
+    db('datacenters',function(dcCollection){
+      dcCollection.find({}).toArray(function(err, dcs){
+        var out = [];
+        for(var i in dcs){
           out.push(stripId(dcs[i]));
         }
 
@@ -143,7 +160,7 @@
         callback(out);
       });
     });
-  };
+  }
 
   module.exports.saveDeployRequest = function(datacenter, deployRequestId){
     db('deploy-request',function(drCollection){
