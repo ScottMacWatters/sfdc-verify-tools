@@ -32,7 +32,9 @@
   }
 
   function stripId(obj){
-    delete obj._id;
+    if(obj){
+      delete obj._id;
+    }
     return obj;
   }
 
