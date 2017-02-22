@@ -122,7 +122,7 @@
 
   //METADATA DEPLOY TIMES / REQUESTS
   module.exports.saveDeployTime = function(datacenter, deployTimes){
-    saveTime('deploy',datacenter,testTimes);
+    saveTime('deploy',datacenter,deployTimes);
   }
 
   module.exports.getDeployTimes = function(callback){
@@ -227,8 +227,8 @@
     getRequests('tooling-deploy-request','containerAsyncRequestId',datacenter, callback);
   }
 
-  module.exports.saveToolingDeployTime = function(datacenter, testTimes){
-    saveTime('tooling-deploy',datacenter,testTimes);
+  module.exports.saveToolingDeployTime = function(datacenter, deployTimes){
+    saveTime('tooling-deploy',datacenter,deployTimes);
   }
 
   module.exports.getToolingDeployTimes = function(callback){
@@ -316,7 +316,7 @@
 
   function saveTime(collectionName, datacenter, times){
     db(collectionName,function(collection){
-      deployTimes.dc = datacenter;
+      times.dc = datacenter;
       var query = {
         dc: times.dc,
         deployId: times.deployId
