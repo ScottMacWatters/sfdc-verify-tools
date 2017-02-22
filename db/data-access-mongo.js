@@ -138,7 +138,7 @@
   };
 
   module.exports.saveDeployRequest = function(datacenter, deployRequestId){
-    saveRequest('deploy-request','asyncProcessId',datacenter, testRequestId);
+    saveRequest('deploy-request','asyncProcessId',datacenter, deployRequestId);
   }
 
   module.exports.clearCompletedDeployRequest = function(datacenter, deployRequestId){
