@@ -54,7 +54,7 @@
             db.clearToolingDeployRequest(datacenter,id);
             db.saveToolingDeployResult(datacenter,times);
           },sfdc_query_timeout);
-        }(ids[key].asyncApexJobId));
+        }(ids[key].containerAsyncRequestId));
       }
     });
   }
