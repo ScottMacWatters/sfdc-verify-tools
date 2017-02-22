@@ -78,6 +78,31 @@ var sampleData = {
         asyncApexJobId: "testId"
       }
     }
+  ],"tooling-deploy": [
+    {
+      query: {
+        dc: "testdc",
+        deployId: "testDeployId"
+      },
+      data: {
+        dc: "testdc",
+        deployId: "testDeployId",
+        queuedSeconds: 1,
+        createdDate: new Date().getTime()
+      }
+    }
+  ],
+  "tooling-deploy-request": [
+    {
+      query: {
+        dc: "testdc",
+        containerAsyncRequestId: "testId"
+      },
+      data: {
+        dc: "testdc",
+        containerAsyncRequestId: "testId"
+      }
+    }
   ],
   "predictions": [
     {
@@ -265,7 +290,6 @@ describe('data-access', function(){
     });
   });
 
-  //TODO These
   it('Should get test times for datacenter',function(done){
     da.getTestTimesForDatacenter('testdc',function(times){
       var sample = sampleData["test"][0].data;
@@ -284,6 +308,44 @@ describe('data-access', function(){
       expect(requests).toBeDefined();
       expect(requests["testId"]).toBeDefined();
       expect(requests["testId"].asyncApexJobId).toBe("testId");
+      done();
+    });
+  });
+
+  it('Should get tooling deploy times', function(done){
+    da.getToolingDeployTimes(function(times){
+      var sample = sampleData["tooling-deploy"][0].data;
+      Object.keys(times).forEach(function(dc){
+        expect(dc).toBe(sample.dc);
+        Object.keys(times[dc]).forEach(function(id){
+          expect(id).toBe(sample.deployId);
+          expect(times[dc][id].deployId).toBe(sample.deployId);
+          expect(times[dc][id].queuedSeconds).toBe(sample.queuedSeconds);
+          expect(times[dc][id].createdDate).toBe(sample.createdDate);
+        });
+      });
+      done();
+    });
+  });
+
+  it('Should get test times for datacenter',function(done){
+    da.getToolingDeployTimesForDatacenter('testdc',function(times){
+      var sample = sampleData["tooling-deploy"][0].data;
+      Object.keys(times).forEach(function(id){
+        expect(id).toBe(sample.deployId);
+        expect(times[id].deployId).toBe(sample.deployId);
+        expect(times[id].queuedSeconds).toBe(sample.queuedSeconds);
+        expect(times[id].createdDate).toBe(sample.createdDate);
+      });
+      done();
+    });
+  });
+
+  it('Should get test requests',function(done){
+    da.getToolingDeployRequests('testdc',function(requests){
+      expect(requests).toBeDefined();
+      expect(requests["testId"]).toBeDefined();
+      expect(requests["testId"].containerAsyncRequestId).toBe("testId");
       done();
     });
   });

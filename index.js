@@ -4,7 +4,8 @@
 
   module.exports.sfdc = {
     tooling: require('./sfdc-bin/tooling.js'),
-    deploy: require('./sfdc-bin/deploy.js')
+    deploy: require('./sfdc-bin/deploy.js'),
+    toolingDeploy: require('./sfdc-bin/tooling-deploy.js')
   };
 
 }());

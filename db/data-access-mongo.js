@@ -85,59 +85,15 @@
     });
   };
 
-  module.exports.saveDeployTime = function(datacenter, deployTimes){
-    db('deploy',function(deployCollection){
-      deployTimes.dc = datacenter;
-      var query = {
-        dc: deployTimes.dc,
-        deployId: deployTimes.deployId
-      }
-      deployCollection.update(query, deployTimes, {upsert: true});
-    });
-  }
-
-  module.exports.getDeployTimes = function(callback){
-    db('deploy',function(deployCollection){
-      deployCollection.find({}).toArray(function(err, deployTimes){
-        callback(splitByDcAndKey(deployTimes,'deployId'));
-      });
-    });
-  };
-
-  module.exports.getDeployTimesForDatacenterForDates = function(datacenter, startTime, endTime, callback){
-    db('deploy',function(deployCollection){
-      var query = {
-        dc: datacenter,
-        createdDate: {
-          $gt:startTime,
-          $lte:endTime
-        }
-      };
-      deployCollection.find(query).toArray(function(err,deployTimes){
-        callback(splitByKey(deployTimes,'deployId'));
-      })
-    });
-  };
-
-  module.exports.getDeployTimesForDatacenter = function(datacenter, callback){
-    db('deploy',function(deployCollection){
-      var query = {
-        dc: datacenter
-      };
-      deployCollection.find(query).toArray(function(err,deployTimes){
-        callback(splitByKey(deployTimes,'deployId'));
-      });
-    });
-  };
-
+  //DATACENTER
   module.exports.getDataCenters = function(callback){
     db('datacenters',function(dcCollection){
       dcCollection.find({}).toArray(function(err, dcs){
         var out = [];
+
         for(var i in dcs){
           out.push(dcs[i].name);
         }
-
         out.sort(function(a,b){
           return a.localeCompare(b);
         });
@@ -164,129 +120,62 @@
     });
   }
 
+  //METADATA DEPLOY TIMES / REQUESTS
+  module.exports.saveDeployTime = function(datacenter, deployTimes){
+    saveTime('deploy',datacenter,testTimes);
+  }
+
+  module.exports.getDeployTimes = function(callback){
+    getTimes('deploy',callback);
+  };
+
+  module.exports.getDeployTimesForDatacenterForDates = function(datacenter, startTime, endTime, callback){
+    getTimesForDatacenterForDates('deploy',datacenter,startTime,endTime,callback);
+  };
+
+  module.exports.getDeployTimesForDatacenter = function(datacenter, callback){
+    getTimesForDatacenter('deploy',datacenter,callback);
+  };
+
   module.exports.saveDeployRequest = function(datacenter, deployRequestId){
-    db('deploy-request',function(drCollection){
-      var doc = {
-        dc: datacenter,
-        asyncProcessId: deployRequestId
-      };
-      var query = {
-        dc: datacenter,
-        asyncProcessId: deployRequestId
-      };
-      drCollection.update(query, doc, {upsert: true});
-    });
+    saveRequest('deploy-request','asyncProcessId',datacenter, testRequestId);
   }
 
   module.exports.clearCompletedDeployRequest = function(datacenter, deployRequestId){
-    db('deploy-request',function(drCollection){
-      var query = {
-        dc: datacenter,
-        asyncProcessId: deployRequestId
-      };
-      drCollection.remove(query);
-    });
+    clearCompletedRequest('deploy-request','asyncProcessId',datacenter, deployRequestId);
   }
 
   module.exports.getDeployRequests = function(datacenter, callback){
-    db('deploy-request',function(drCollection){
-      var query = {
-        dc: datacenter
-      };
-      drCollection.find(query).toArray(function(err,requests){
-        if(requests.length === 0){
-          callback(null);
-        }
-        else {
-          callback(splitByKey(requests,'asyncProcessId'));
-        }
-      });
-    });
+    getRequests('deploy-request', 'asyncProcessId', datacenter, callback);
   }
 
+  //TOOLING TEST TIMES / REQUESTS
   module.exports.saveTestRequest = function(datacenter, testRequestId){
-    db('test-request',function(trCollection){
-      var doc = {
-        dc: datacenter,
-        asyncApexJobId: testRequestId
-      };
-      var query = {
-        dc: datacenter,
-        asyncApexJobId: testRequestId
-      };
-      trCollection.update(query, doc, {upsert: true});
-    });
+    saveRequest('test-request','asyncApexJobId',datacenter, testRequestId);
   }
 
   module.exports.clearCompletedTestRequest = function(datacenter, testRequestId){
-    db('test-request',function(trCollection){
-      var query = {
-        dc: datacenter,
-        asyncApexJobId: testRequestId
-      };
-      trCollection.remove(query);
-    });
+    clearCompletedRequest('test-request','asyncApexJobId',datacenter, testRequestId);
   }
 
   module.exports.getTestRequests = function(datacenter, callback){
-    db('test-request',function(trCollection){
-      var query = {
-        dc: datacenter
-      };
-      trCollection.find(query).toArray(function(err,requests){
-        if(requests.length === 0){
-          callback(null);
-        }
-        else {
-          callback(splitByKey(requests,'asyncApexJobId'));
-        }
-      });
-    });
+    getRequests('test-request','asyncApexJobId',datacenter, callback);
   }
 
   module.exports.saveTestTime = function(datacenter, testTimes){
-    db('test',function(testCollection){
-      testTimes.dc = datacenter;
-      var query = {
-        dc: testTimes.dc,
-        deployId: testTimes.deployId
-      }
-      testCollection.update(query, testTimes, {upsert: true});
-    });
+    saveTime('test',datacenter,testTimes);
   }
 
   module.exports.getTestTimes = function(callback){
-    db('test',function(testCollection){
-      testCollection.find({}).toArray(function(err, testTimes){
-        callback(splitByDcAndKey(testTimes,'deployId'));
-      });
-    });
+    getTimes('test',callback);
   };
 
   module.exports.getTestTimesForDatacenterForDates = function(datacenter, startTime, endTime, callback){
-    db('test',function(testCollection){
-      var query = {
-        dc: datacenter,
-        createdDate: {
-          $gt:startTime,
-          $lte:endTime
-        }
-      };
-      testCollection.find(query).toArray(function(err,testTimes){
-        callback(splitByKey(testTimes,'deployId'));
-      })
-    });
+    getTimesForDatacenterForDates('test',datacenter,startTime,endTime,callback);
   }
 
   module.exports.getTestTimesForDatacenter = function(datacenter, callback){
-    db('test',function(testCollection){
-      var query = {
-        dc: datacenter
-      };
-      testCollection.find(query).toArray(function(err,testTimes){
-        callback(splitByKey(testTimes,'deployId'));
-      });
-    });
+    getTimesForDatacenter('test',datacenter,callback);
   };
 
   module.exports.savePredictionTimes = function(times){
@@ -325,5 +214,155 @@
     });
   }
 
+  //TOOLING DEPLOY TIMES / REQUESTS
+  module.exports.saveToolingDeployRequest = function(datacenter, testRequestId){
+    saveRequest('tooling-deploy-request','containerAsyncRequestId',datacenter, testRequestId);
+  }
+
+  module.exports.clearCompletedToolingDeployRequest = function(datacenter, testRequestId){
+    clearCompletedRequest('tooling-deploy-request','containerAsyncRequestId',datacenter, testRequestId);
+  }
+
+  module.exports.getToolingDeployRequests = function(datacenter, callback){
+    getRequests('tooling-deploy-request','containerAsyncRequestId',datacenter, callback);
+  }
+
+  module.exports.saveToolingDeployTime = function(datacenter, testTimes){
+    saveTime('tooling-deploy',datacenter,testTimes);
+  }
+
+  module.exports.getToolingDeployTimes = function(callback){
+    getTimes('tooling-deploy',callback);
+  };
+
+  module.exports.getToolingDeployTimesForDatacenterForDates = function(datacenter, startTime, endTime, callback){
+    getTimesForDatacenterForDates('tooling-deploy',datacenter,startTime,endTime,callback);
+  }
+
+  module.exports.getToolingDeployTimesForDatacenter = function(datacenter, callback){
+    getTimesForDatacenter('tooling-deploy',datacenter,callback);
+  };
+
+  //PREDICTION TIMES
+  module.exports.savePredictionTimes = function(times){
+    db('predictions',function(predictionCollection){
+      var docs = [];
+      for(var dc in times){
+        for(var day in times[dc]){
+          for(var hour in times[dc][day]){
+            var doc = times[dc][day][hour];
+            doc.dc = dc;
+            doc.day = day;
+            doc.hour = hour;
+            var query = {
+              dc: doc.dc,
+              day: doc.day,
+              hour: doc.hour
+            };
+            predictionCollection.update(query, doc, {upsert: true});
+          }
+        }
+      }
+    });
+  }
+
+  module.exports.getPredictionTimesForDatacenter = function(datacenter, callback){
+    db('predictions',function(predictionsCollection){
+      predictionsCollection.find({dc: datacenter}).toArray(function(err, predictions){
+        var ret = {};
+        for(var i in predictions){
+          var doc = stripId(predictions[i]);
+          if(!ret[doc.day]) ret[doc.day] = {};
+          ret[doc.day][doc.hour] = doc;
+        }
+        callback(ret);
+      });
+    });
+  }
+
+  function getTimesForDatacenter(collectionName,datacenter, callback){
+    db(collectionName,function(collection){
+      var query = {
+        dc: datacenter
+      };
+      collection.find(query).toArray(function(err,times){
+        callback(splitByKey(times,'deployId'));
+      });
+    });
+  }
+
+  function getTimesForDatacenterForDates(collectionName,datacenter, startTime, endTime, callback){
+    db(collectionName,function(collection){
+      var query = {
+        dc: datacenter,
+        createdDate: {
+          $gt:startTime,
+          $lte:endTime
+        }
+      };
+      collection.find(query).toArray(function(err,times){
+        callback(splitByKey(times,'deployId'));
+      })
+    });
+  }
+
+  function getTimes(collectionName,callback){
+    db(collectionName,function(collection){
+      collection.find({}).toArray(function(err, times){
+        callback(splitByDcAndKey(times,'deployId'));
+      });
+    });
+  }
+
+  function saveTime(collectionName, datacenter, times){
+    db(collectionName,function(collection){
+      deployTimes.dc = datacenter;
+      var query = {
+        dc: times.dc,
+        deployId: times.deployId
+      }
+      collection.update(query, times, {upsert: true});
+    });
+  }
+
+  function saveRequest(collectionName, identifier, datacenter, requestId){
+    db(collectionName,function(collection){
+      var doc = {
+        dc: datacenter
+      };
+      doc[identifier] = requestId;
+      var query = {
+        dc: datacenter
+      };
+      query[identifier] = requestId;
+      collection.update(query, doc, {upsert: true});
+    });
+  }
+
+  function getRequests(collectionName, identifier, datacenter, callback){
+    db(collectionName,function(collection){
+      var query = {
+        dc: datacenter
+      };
+      collection.find(query).toArray(function(err,requests){
+        if(requests.length === 0){
+          callback(null);
+        }
+        else {
+          callback(splitByKey(requests,identifier));
+        }
+      });
+    });
+  }
+
+  function clearCompletedRequest(collectionName, identifier, datacenter, requestId){
+    db(collectionName,function(collection){
+      var query = {
+        dc: datacenter,
+      };
+      query[identifier] = requestId;
+      collection.remove(query);
+    });
+  }
 
 }());
