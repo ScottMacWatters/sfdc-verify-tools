@@ -52,7 +52,7 @@
               return;
             }
             db.clearCompletedToolingDeployRequest(datacenter,id);
-            db.saveToolingDeployResult(datacenter,times);
+            db.saveToolingDeployTime(datacenter,times);
           },sfdc_query_timeout);
         }(ids[key].containerAsyncRequestId));
       }
