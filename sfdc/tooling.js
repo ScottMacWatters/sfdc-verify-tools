@@ -27,7 +27,7 @@
       attributes: {
         'xsi:type': 'MetadataContainer'
       },
-      Name: 'sfdc-verify' + (process.env.NAMESPACE) ? process.env.NAMESPACE : ''
+      Name: 'sfdc-verify' + ((process.env.NAMESPACE) ? process.env.NAMESPACE : '')
     }
   };
 
@@ -135,6 +135,8 @@
                 callback(err.body);
                 return;
               }
+
+              console.log(response.result[0]);
 
               callback(null,response.result[0].id);
             });
