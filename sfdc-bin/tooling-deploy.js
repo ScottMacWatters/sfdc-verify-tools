@@ -31,7 +31,7 @@
             }
             db.saveToolingDeployRequest(dc,id);
             outstanding--;
-            checkTestTask(dc);
+            checkDeployTask(dc);
           });
         }(dc));
       }
