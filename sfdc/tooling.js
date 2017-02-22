@@ -136,8 +136,6 @@
                 return;
               }
 
-              console.log(response.result[0]);
-
               callback(null,response.result[0].id);
             });
           });
