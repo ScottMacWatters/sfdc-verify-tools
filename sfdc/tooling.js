@@ -96,7 +96,6 @@
 
       tool_client.query({queryString: APEX_CLASS_QUERY_STRING}, function(err, response){
         if(err){
-          console.log(err.body);
           callback(err.body);
           return;
         }
@@ -104,7 +103,6 @@
 
         tool_client.create(metadataContainerOptions,function(err, response){
           if(err) {
-            console.log(err.body);
             callback(err.body);
             return;
           }
@@ -124,7 +122,6 @@
 
           tool_client.create(apexClassOptions, function(err, response){
             if(err){
-              console.log(err.body);
               callback(err.body);
               return;
             }
@@ -135,7 +132,6 @@
 
             tool_client.create(asyncRequestOptions,function(err, response){
               if(err){
-                console.log(err.body);
                 callback(err.body);
                 return;
               }
@@ -226,7 +222,6 @@
   function getQueryStatusResponse(statusFunction, options, callback, timeout){
     statusFunction(options, function(err, response){
       if(err){
-        console.log(err.body);
         callback(err.body);
         return;
       }

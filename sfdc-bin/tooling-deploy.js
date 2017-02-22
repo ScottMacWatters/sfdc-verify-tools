@@ -10,15 +10,15 @@
 
     setInterval(function(){
       if(outstanding === 0){
-        console.log('Test Execution Complete.');
+        console.log('Tooling Deploy Complete.');
         callback();
       }
       else{
-        console.log(outstanding + ' Test Executions in progress.');
+        console.log(outstanding + ' Tooling Deploys in progress.');
       }
     },1000 * 60);
 
-    console.log('Beginning Async Apex Tests for datacenters',Object.keys(logins));
+    console.log('Beginning Tooling Deploy for datacenters',Object.keys(logins));
     for(var dc in logins){
       outstanding++;
       try{
