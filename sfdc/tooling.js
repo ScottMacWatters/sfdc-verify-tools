@@ -226,7 +226,7 @@
         return;
       }
       if(!response.result.records){
-        callback('No record found for this query');
+        callback('No record found for this query: ' + options.queryString);
         return;
       }
 
