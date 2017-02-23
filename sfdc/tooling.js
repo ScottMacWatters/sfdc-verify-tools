@@ -225,6 +225,10 @@
         callback(err.body);
         return;
       }
+      if(!response.result.records){
+        callback('No record found for this query');
+        return;
+      }
 
       var record = response.result.records[0];
 

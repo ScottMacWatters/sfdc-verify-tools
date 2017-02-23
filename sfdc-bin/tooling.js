@@ -45,15 +45,21 @@
     var outstandingIds = db.getTestRequests(datacenter, function(ids){
       for(var key in ids){
         (function(id){
-          sfdc.checkTestTaskResult(login,id,function(err,times){
-            if(err){
-              console.log('Error:');
-              console.log(err);
-              return;
-            }
-            db.clearCompletedTestRequest(datacenter,id);
-            db.saveTestTime(datacenter,times);
-          },sfdc_query_timeout);
+          try{
+            sfdc.checkTestTaskResult(login,id,function(err,times){
+              if(err){
+                console.log('Error:');
+                console.log(err);
+                return;
+              }
+              db.clearCompletedTestRequest(datacenter,id);
+              db.saveTestTime(datacenter,times);
+            },sfdc_query_timeout);
+          }
+          catch(err){
+            console.log('Error:');
+            console.log(err);
+          }
         }(ids[key].asyncApexJobId));
       }
     });
